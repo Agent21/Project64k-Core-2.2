@@ -91,3 +91,10 @@
 /Textures
 Bin/Release/Config/NRage.ini
 Source/Project64/n02.ini
+Bin/Release/n02.ini
+Source/3rd Party/wx/lib/vc_lib/mswu/wx/setup.h
+Bin/Release/Config/Glide64.rdb
+Bin/Release/Config/Project64.zcache
+Bin/Release/Config/Project64.rdx
+Bin/Release/Config/Project64.cache3
+Bin/Release/Config/Project64.rdn
