@@ -89,3 +89,5 @@
 /Source/Glide64/Glide64.aps
 /Source/Project64/User Interface/UI Resources.aps
 /Textures
+Bin/Release/Config/NRage.ini
+Source/Project64/n02.ini
