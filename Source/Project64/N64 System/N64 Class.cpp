@@ -1845,7 +1845,7 @@ void CN64System::RefreshScreen ( void ) {
 			}
 			for (int Control = ck->numberOfPlayers; Control < 4; Control++)
 			{
-				m_Buttons[Control] = ck->getValues(Control); // get every player's input back
+				m_Buttons[Control] = 0;
 			}
 
 			// apparently if you don't have these calls, the emulator freaks out and ignores all input?
