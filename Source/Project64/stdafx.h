@@ -28,3 +28,5 @@
 
 #include "3rd Party/Zip.h"
 #include "3rd Party/7zip.h"
+
+#include "CKaillera.h"

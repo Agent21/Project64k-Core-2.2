@@ -30,6 +30,9 @@
   <PropertyGroup>
     <_ProjectFileVersion>12.0.21005.1</_ProjectFileVersion>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <TargetName>Project64</TargetName>
+  </PropertyGroup>
   <ItemDefinitionGroup>
     <Link>
       <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
@@ -49,6 +52,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="CKaillera.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Plugins\Plugin Base.cpp" />
     <ClCompile Include="stdafx.cpp">
@@ -184,6 +188,7 @@
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="CKaillera.h" />
     <ClInclude Include="Multilanguage.h" />
     <ClInclude Include="N64 System.h" />
     <ClInclude Include="Plugin.h" />

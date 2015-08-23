@@ -411,6 +411,9 @@
     <ClCompile Include="Plugins\Plugin Base.cpp">
       <Filter>Source Files\Plugin Source</Filter>
     </ClCompile>
+    <ClCompile Include="CKaillera.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="User Interface\Bitmaps\AboutScreenBottom.bmp">
@@ -828,6 +831,9 @@
       <Filter>Header Files\Plugin Headers</Filter>
     </ClInclude>
     <ClInclude Include="Version.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CKaillera.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

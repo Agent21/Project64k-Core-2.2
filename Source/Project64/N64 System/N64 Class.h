@@ -68,7 +68,7 @@ public:
 
 	inline bool   DmaUsed     ( void ) const { return m_DMAUsed; }
 	inline void   SetDmaUsed  ( bool DMAUsed) { m_DMAUsed = DMAUsed; }
-	inline DWORD  GetButtons  ( int Control ) { return m_Buttons[Control]; }
+	inline DWORD  GetButtons(int Control) { return m_Buttons[Control];}
 
 	//Variable used to track that the SP is being handled and stays the same as the real SP in sync core
 #ifdef TEST_SP_TRACKING

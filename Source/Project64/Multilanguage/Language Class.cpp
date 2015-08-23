@@ -67,6 +67,7 @@ void CLanguage::LoadDefaultStrings (void)
 		DEF_STR(MENU_REFRESH,    L"Refresh Rom List"        );
 		DEF_STR(MENU_RECENT_ROM, L"Recent Rom"              );
 		DEF_STR(MENU_RECENT_DIR, L"Recent Rom Directories"  );
+		DEF_STR(MENU_KAILLERA,   L"Start Kaillera Netplay"  );
 		DEF_STR(MENU_EXIT,       L"E&xit"                   );
 
 //System Menu

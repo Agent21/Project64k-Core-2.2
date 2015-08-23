@@ -1,5 +1,7 @@
 #include "stdafx.h"
 
+extern CKaillera *ck;
+
 CRomBrowser::CRomBrowser (HWND & MainWindow, HWND & StatusWindow ) :
 	m_MainWindow(MainWindow), 
 	m_StatusWindow(StatusWindow),
@@ -973,10 +975,12 @@ void CRomBrowser::LoadRomList (void) {
 	//Read Every Entry
 	DeallocateBrushs();
 	m_RomInfo.clear();
+	ck->clearGameList();
 	for (int count = 0; count < Entries; count++) {
 		ROM_INFO RomInfo;
 		ReadFile(hFile,&RomInfo,RomInfoSize,&dwRead,NULL);
 		RomInfo.SelColorBrush = NULL;
+		ck->addGame(RomInfo.GoodName, RomInfo.szFullFileName);
 			
 		LV_ITEM  lvItem;
 		memset(&lvItem, 0, sizeof(lvItem));
@@ -988,6 +992,7 @@ void CRomBrowser::LoadRomList (void) {
 		ListView_InsertItem((HWND)m_hRomList, &lvItem);	
 		m_RomInfo.push_back(RomInfo);
 	}
+	ck->terminateGameList();
 	CloseHandle(hFile);
 	AllocateBrushs();
 	RomList_SortList();

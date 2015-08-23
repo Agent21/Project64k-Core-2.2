@@ -1,5 +1,7 @@
 #include "stdafx.h"
 
+CKaillera *ck;
+
 CMainMenu::CMainMenu ( CMainGui * hMainWindow ):
 	CBaseMenu(),
     m_ResetAccelerators(true)
@@ -33,6 +35,8 @@ CMainMenu::CMainMenu ( CMainGui * hMainWindow ):
 	{
 		g_Settings->RegisterChangeCB(*iter,this,(CSettings::SettingChangedFunc)SettingsChanged);
 	}
+
+	ck = new CKaillera();
 }
 
 CMainMenu::~CMainMenu()
@@ -41,6 +45,8 @@ CMainMenu::~CMainMenu()
 	{
 		g_Settings->UnregisterChangeCB(*iter,this,(CSettings::SettingChangedFunc)SettingsChanged);
 	}
+
+	delete ck;
 }
 
 
@@ -98,7 +104,11 @@ bool CMainMenu::ProcessMessage(HWND hWnd, DWORD /*FromAccelerator*/, DWORD MenuI
 		WriteTrace(TraceDebug,__FUNCTION__ ": ID_FILE_ROMDIRECTORY 3");
 		break;
 	case ID_FILE_REFRESHROMLIST: _Gui->RefreshRomBrowser(); break;
-	case ID_FILE_EXIT:           DestroyWindow((HWND)hWnd); break;
+	case ID_FILE_KAILLERA:
+		ck->setInfos();
+		ck->selectServerDialog(hWnd);
+		break;
+	case ID_FILE_EXIT:           /*DestroyWindow((HWND)hWnd);*/ PostQuitMessage(0); break;
 	case ID_SYSTEM_RESET_SOFT:
 		WriteTrace(TraceDebug,__FUNCTION__ ": ID_SYSTEM_RESET_SOFT"); 
 		g_BaseSystem->ExternalEvent(SysEvent_ResetCPU_Soft); 
@@ -775,6 +785,8 @@ void CMainMenu::FillOutMenu ( HMENU hMenu )
 			}
 		}
 	}
+	FileMenu.push_back(MENU_ITEM(SPLITER));
+	FileMenu.push_back(MENU_ITEM(ID_FILE_KAILLERA, MENU_KAILLERA, m_ShortCuts.ShortCutString(ID_FILE_KAILLERA, AccessLevel)));
 	FileMenu.push_back(MENU_ITEM(SPLITER));
 	FileMenu.push_back(MENU_ITEM(ID_FILE_EXIT, MENU_EXIT,m_ShortCuts.ShortCutString(ID_FILE_EXIT,AccessLevel)));
 

@@ -10,6 +10,8 @@
 ****************************************************************************/
 #include "stdafx.h"
 
+extern CKaillera *ck;
+
 CControl_Plugin::CControl_Plugin(void) :
 	m_AllocatedControllers(false),
 	WM_KeyDown(NULL),
@@ -29,10 +31,10 @@ CControl_Plugin::~CControl_Plugin()
 	UnloadPlugin();
 }
 
-bool CControl_Plugin::LoadFunctions ( void )
+bool CControl_Plugin::LoadFunctions(void)
 {
 	// Find entries for functions in DLL
-	void  (__cdecl *InitiateControllers)( void );
+	void(__cdecl *InitiateControllers)(void);
 	LoadFunction(InitiateControllers);
 	LoadFunction(ControllerCommand);
 	LoadFunction(GetKeys);
@@ -42,15 +44,17 @@ bool CControl_Plugin::LoadFunctions ( void )
 	LoadFunction(RumbleCommand);
 
 	//Make sure dll had all needed functions
-	if (InitiateControllers == NULL) { UnloadPlugin(); return false;  }
+	if (InitiateControllers == NULL) { UnloadPlugin(); return false; }
 
 	if (m_PluginInfo.Version >= 0x0102)
 	{
-		if (PluginOpened    == NULL) { UnloadPlugin(); return false; }
+		if (PluginOpened == NULL) { UnloadPlugin(); return false; }
 	}
 
 	// Allocate our own controller
 	m_AllocatedControllers = true;
+
+	// normal controller allocation
 	for (int i = 0; i < 4; i++)
 	{
 		m_Controllers[i] = new CCONTROL(m_PluginControllers[i].Present, m_PluginControllers[i].RawData, m_PluginControllers[i].Plugin);
@@ -140,6 +144,7 @@ void CControl_Plugin::UnloadPluginDetails(void)
 
 void CControl_Plugin::UpdateKeys (void) 
 {
+	//MessageBox(NULL, "called update keys", "call", NULL);
 	if (!m_AllocatedControllers) { return; }
 	for (int cont = 0; cont < sizeof(m_Controllers) / sizeof(m_Controllers[0]); cont++) 
 	{
@@ -155,6 +160,7 @@ void CControl_Plugin::UpdateKeys (void)
 
 void CControl_Plugin::SetControl(CControl_Plugin const * const Plugin)
 {
+	//MessageBox(NULL, "called SetControl", "call", NULL);
 	if (m_AllocatedControllers) {
 		for (int count = 0; count < sizeof(m_Controllers) / sizeof(m_Controllers[0]); count++) {
 			delete m_Controllers[count];

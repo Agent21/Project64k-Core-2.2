@@ -108,11 +108,16 @@ void CPifRam::PifRamRead (void)
 			if ((m_PifRam[CurPos] & 0xC0) == 0) 
 			{
 				if (Channel < 4) {
-					if (Controllers[Channel].Present && Controllers[Channel].RawData) {
-						if (g_Plugins->Control()->ReadController) { g_Plugins->Control()->ReadController(Channel,&m_PifRam[CurPos]); }
-					} else {						
-						ReadControllerCommand(Channel,&m_PifRam[CurPos]);
+					/*if (Controllers[Channel].Present && Controllers[Channel].RawData) {
+						if (g_Plugins->Control()->ReadController) { g_Plugins->Control()->ReadController(Channel, &m_PifRam[CurPos]); }
 					}
+					else {
+						ReadControllerCommand(Channel, &m_PifRam[CurPos]);
+					}*/
+
+					// forcefully disable the RawData option
+					if (Controllers[Channel].Present)
+						ReadControllerCommand(Channel, &m_PifRam[CurPos]);
 				} 
 				CurPos += m_PifRam[CurPos] + (m_PifRam[CurPos + 1] & 0x3F) + 1;
 				Channel += 1;
@@ -123,6 +128,7 @@ void CPifRam::PifRamRead (void)
 			break;
 		}
 	} 
+
 	if (g_Plugins->Control()->ReadController) { g_Plugins->Control()->ReadController(-1,NULL); }
 }
 
@@ -190,11 +196,15 @@ void CPifRam::PifRamWrite (void) {
 		default:
 			if ((m_PifRam[CurPos] & 0xC0) == 0) {
 				if (Channel < 4) {
-					if (Controllers[Channel].Present && Controllers[Channel].RawData) {
+					/*if (Controllers[Channel].Present && Controllers[Channel].RawData) {
 						if (g_Plugins->Control()->ControllerCommand) { g_Plugins->Control()->ControllerCommand(Channel,&m_PifRam[CurPos]); }
 					} else {
 						ProcessControllerCommand(Channel,&m_PifRam[CurPos]);
-					}
+					}*/
+
+					// forcefully disable the RawData option
+					if (Controllers[Channel].Present)
+						ProcessControllerCommand(Channel, &m_PifRam[CurPos]);
 				} else if (Channel == 4) {
 					EepromCommand(&m_PifRam[CurPos]);
 				} else {
@@ -213,6 +223,7 @@ void CPifRam::PifRamWrite (void) {
 		}
 	}
 	m_PifRam[0x3F] = 0;
+
 	if (g_Plugins->Control()->ControllerCommand) { g_Plugins->Control()->ControllerCommand(-1,NULL); }
 }
 
@@ -497,13 +508,14 @@ void CPifRam::ReadControllerCommand (int Control, BYTE * Command) {
 
 	switch (Command[2]) {
 	case 0x01: // read controller
-		if (Controllers[Control].Present == TRUE) 
+		if (Controllers[Control].Present == TRUE)
 		{
-			if (bShowPifRamErrors()) 
+			if (bShowPifRamErrors())
 			{
 				if (Command[0] != 1) { g_Notify->DisplayError(L"What am I meant to do with this Controller Command"); }
 				if (Command[1] != 4) { g_Notify->DisplayError(L"What am I meant to do with this Controller Command"); }
 			}
+
 			*(DWORD *)&Command[3] = g_BaseSystem->GetButtons(Control);
 		}
 		break;
