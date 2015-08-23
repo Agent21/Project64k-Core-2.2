@@ -115,9 +115,7 @@ void CPifRam::PifRamRead (void)
 						ReadControllerCommand(Channel, &m_PifRam[CurPos]);
 					}*/
 
-					// forcefully disable the RawData option
-					if (Controllers[Channel].Present)
-						ReadControllerCommand(Channel, &m_PifRam[CurPos]);
+					ReadControllerCommand(Channel, &m_PifRam[CurPos]);
 				} 
 				CurPos += m_PifRam[CurPos] + (m_PifRam[CurPos + 1] & 0x3F) + 1;
 				Channel += 1;
@@ -202,9 +200,7 @@ void CPifRam::PifRamWrite (void) {
 						ProcessControllerCommand(Channel,&m_PifRam[CurPos]);
 					}*/
 
-					// forcefully disable the RawData option
-					if (Controllers[Channel].Present)
-						ProcessControllerCommand(Channel, &m_PifRam[CurPos]);
+					ProcessControllerCommand(Channel, &m_PifRam[CurPos]);
 				} else if (Channel == 4) {
 					EepromCommand(&m_PifRam[CurPos]);
 				} else {
