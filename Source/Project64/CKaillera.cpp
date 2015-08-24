@@ -11,8 +11,6 @@ void(__stdcall* kailleraEndGame) ();
 
 extern CKaillera *ck;
 
-DWORD oldControllers[4];
-
 void ShowError(char* str)
 {
 	MessageBox(NULL, str, str, NULL);
