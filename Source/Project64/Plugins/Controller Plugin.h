@@ -86,6 +86,8 @@ public:
 	inline CCONTROL const * Controller(int control) { return m_Controllers[control]; }
 	inline CONTROL * PluginControllers(void) { return m_PluginControllers; }
 
+	CONTROL m_PluginControllers[4];
+
 private:
 	CControl_Plugin(const CControl_Plugin&);			// Disable copy constructor
 	CControl_Plugin& operator=(const CControl_Plugin&);	// Disable assignment
@@ -99,6 +101,6 @@ private:
 	bool   m_AllocatedControllers;
 
 	// What the different controls are set up as
-	CONTROL m_PluginControllers[4];
+	// CONTROL m_PluginControllers[4]; // temporary moved to public as a quick fix
 	CCONTROL * m_Controllers[4];
 };

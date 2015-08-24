@@ -81,7 +81,7 @@ bool CControl_Plugin::Initiate(CN64System * System, CMainGui * RenderWindow)
 		InitiateControllers_1_0((HWND)RenderWindow->m_hMainWindow,m_PluginControllers);
 		m_Initilized = true;
 	}
-	else if (m_PluginInfo.Version >= 0x0101)
+	else if (m_PluginInfo.Version >= 0x0101) // this path is taken with the default plugin
 	{
 		typedef struct {
 			HWND hMainWindow;
@@ -111,7 +111,17 @@ bool CControl_Plugin::Initiate(CN64System * System, CMainGui * RenderWindow)
 		ControlInfo.MemoryBswaped = TRUE;
 
 		InitiateControllers_1_1(&ControlInfo);
+
 		m_Initilized = true;
+	}
+
+	// force all 4 controllers to be plugged in
+	if (ck->isPlayingKailleraGame)
+	{
+		for (int i = 0; i < 4; i++)
+		{
+			m_PluginControllers[i].Present = TRUE;
+		}
 	}
 
 	//jabo had a bug so I call CreateThread so his dllmain gets called again
