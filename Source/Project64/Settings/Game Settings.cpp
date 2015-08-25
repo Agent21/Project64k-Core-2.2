@@ -48,7 +48,7 @@ void CGameSettings::RefreshGameSettings()
 	m_RdramSize         = g_Settings->LoadDword(Game_RDRamSize);
 	m_DelaySI           = g_Settings->LoadBool(Game_DelaySI);
 	m_DelayDP           = g_Settings->LoadBool(Game_DelayDP);
-	m_bFixedAudio       = g_Settings->LoadBool(Game_FixedAudio);
+	m_bFixedAudio       = true; // force this for netplay stability.  old code was ->> //g_Settings->LoadBool(Game_FixedAudio);
 	m_bSyncToAudio      = m_bFixedAudio ? g_Settings->LoadBool(Game_SyncViaAudio) : false;
 	m_b32Bit            = g_Settings->LoadBool(Game_32Bit);
 	m_bFastSP           = g_Settings->LoadBool(Game_FastSP);
