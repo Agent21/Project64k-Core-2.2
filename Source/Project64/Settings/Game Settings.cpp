@@ -38,7 +38,6 @@ extern CKaillera *ck;
 
 void CGameSettings::RefreshGameSettings()
 {
-	MessageBox(NULL, "call", "call", NULL);
 	m_bSMM_StoreInstruc = false /*g_Settings->LoadBool(Game_SMM_StoreInstruc)*/;
 	m_bSMM_Protect      = g_Settings->LoadBool(Game_SMM_Protect);
 	m_bSMM_ValidFunc    = g_Settings->LoadBool(Game_SMM_ValidFunc);
