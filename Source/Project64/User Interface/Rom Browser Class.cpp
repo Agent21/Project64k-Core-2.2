@@ -289,6 +289,7 @@ void CRomBrowser::AddRomToList (const char * RomLocation, const char * lpLastRom
 
 void CRomBrowser::AddRomInfoToList (ROM_INFO &RomInfo , const char * lpLastRom) {	
 	int ListPos = m_RomInfo.size();
+	ck->addGame(RomInfo.GoodName, RomInfo.szFullFileName);
 	m_RomInfo.push_back(RomInfo);
 
 	LV_ITEM  lvItem;
@@ -1048,6 +1049,7 @@ void CRomBrowser::RefreshRomBrowserStatic (CRomBrowser * _this)
 		WriteTrace(TraceDebug,__FUNCTION__ " 1");
 		ListView_DeleteAllItems((HWND)_this->m_hRomList);
 		_this->DeallocateBrushs();
+		ck->clearGameList();
 		_this->m_RomInfo.clear();
 		WriteTrace(TraceDebug,__FUNCTION__ " 2");
 		InvalidateRect((HWND)_this->m_hRomList,NULL,TRUE);
