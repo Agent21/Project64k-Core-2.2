@@ -34,8 +34,11 @@ bool  CGameSettings::m_bLinkBlocks;
 DWORD CGameSettings::m_LookUpMode; //FUNC_LOOKUP_METHOD
 SYSTEM_TYPE CGameSettings::m_SystemType = SYSTEM_NTSC;
 
+extern CKaillera *ck;
+
 void CGameSettings::RefreshGameSettings()
 {
+	MessageBox(NULL, "call", "call", NULL);
 	m_bSMM_StoreInstruc = false /*g_Settings->LoadBool(Game_SMM_StoreInstruc)*/;
 	m_bSMM_Protect      = g_Settings->LoadBool(Game_SMM_Protect);
 	m_bSMM_ValidFunc    = g_Settings->LoadBool(Game_SMM_ValidFunc);
@@ -48,7 +51,7 @@ void CGameSettings::RefreshGameSettings()
 	m_RdramSize         = g_Settings->LoadDword(Game_RDRamSize);
 	m_DelaySI           = g_Settings->LoadBool(Game_DelaySI);
 	m_DelayDP           = g_Settings->LoadBool(Game_DelayDP);
-	m_bFixedAudio       = true; // force this for netplay stability.  old code was ->> //g_Settings->LoadBool(Game_FixedAudio);
+	m_bFixedAudio		= ck->isPlayingKailleraGame ? true : g_Settings->LoadBool(Game_FixedAudio);; // force this on kaillera for netplay stability
 	m_bSyncToAudio      = m_bFixedAudio ? g_Settings->LoadBool(Game_SyncViaAudio) : false;
 	m_b32Bit            = g_Settings->LoadBool(Game_32Bit);
 	m_bFastSP           = g_Settings->LoadBool(Game_FastSP);
