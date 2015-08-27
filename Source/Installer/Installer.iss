@@ -10,7 +10,7 @@ AppVersion={#AppVersion}
 DefaultDirName={pf}\Project64 2.2
 VersionInfoVersion={#AppVersion}
 OutputDir={#BaseDir}\Bin\{#Configuration}
-OutputBaseFilename=Setup Project64 2.2
+OutputBaseFilename=Setup Project64k Core 2.2
 VersionInfoDescription=Installation Setup of Project64 2.2
 Compression=lzma2/ultra64
 WizardImageFile=Installer-Sidebar.bmp
@@ -25,6 +25,7 @@ Filename: "{app}\Project64.exe"; Description: "{cm:LaunchProgram,{#StringChange(
 
 [Files]
 Source: "{#BaseDir}\Bin\{#Configuration}\Project64.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#BaseDir}\Bin\{#Configuration}\kailleraclient.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "{#BaseDir}\Config\Glide64.rdb"; DestDir: "{app}\Config"
 Source: "{#BaseDir}\Config\Project64.cht"; DestDir: "{app}\Config"
 Source: "{#BaseDir}\Config\Project64.rdb"; DestDir: "{app}\Config"

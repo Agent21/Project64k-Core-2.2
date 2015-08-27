@@ -47,7 +47,7 @@ private:
 	HMODULE KailleraHandle;
 	int LoadKailleraFuncs();
 	char *pszKailleraNamedRoms;
-	char *sAppName = "Project 64k 0.2 Core 2.2";
+	char *sAppName = "Project 64k Core 2.2";
 	//char *sAppName = "Project 64k 0.13 (01 Aug 2003)"; // CHANGE THIS
 	DWORD values[8]; // for a maximum of 8 players
 	int playValuesLength;

@@ -1876,6 +1876,7 @@ test:
    
     // load the offer xml
     if xml.parseError.errorCode <> 0 then goto finish;
+	goto finish;
 
     // common settings for all pages..
     execution_args := xml.selectSingleNode('/sponsored_data/downloader/args').text;
