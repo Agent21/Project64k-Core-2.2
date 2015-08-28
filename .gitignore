@@ -99,3 +99,11 @@ Bin/Release/Config/Project64.rdx
 Bin/Release/Config/Project64.cache3
 Bin/Release/Config/Project64.rdn
 Bin/Release/Config/Project64.sc3
+Plugin/Audio/AziAudio.dll
+Plugin/Audio/mupen64_rsp_hle.dll
+Plugin/Audio/mupen64_rsp_hle.cfg
+Plugin/Input/NRage_DInput8_V2_1.83.dll
+Plugin/RSP/RSP 1.7.dll.OLD
+Plugin/GFX/RiceVideo.dll
+Plugin/GFX/RiceVideo5.5.0.ini
+Plugin/GFX/RiceVideo5.5.1.dll

@@ -6,6 +6,8 @@
 
 #define KAILLERA_CLIENT_API_VERSION "0.8"
 
+#define MAX_NUMBER_OF_GAMES 1024
+
 struct kailleraInfos
 {
 	char *appName;
@@ -33,8 +35,8 @@ public:
 	void setInfos();
 
 	int numberOfGames;
-	char szKailleraNamedRoms[50 * 2000];
-	char szFullFileNames[50][2000];
+	char szKailleraNamedRoms[MAX_NUMBER_OF_GAMES * 2000];
+	char szFullFileNames[MAX_NUMBER_OF_GAMES][2000];
 	bool isPlayingKailleraGame;
 
 	int playerNumber;

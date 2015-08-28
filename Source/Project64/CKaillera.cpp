@@ -28,9 +28,6 @@ int WINAPI kailleraGameCallback(char *game, int player, int numplayers)
 	{
 		if (strncmp(temp, game, strlen(temp)) == 0)
 		{
-			//MessageBox(NULL, temp, "You must want to play", NULL);
-			//MessageBox(NULL, ck->szFullFileNames[x], "Location", NULL);
-
 			temp = ck->szFullFileNames[x];
 			break;
 		}
