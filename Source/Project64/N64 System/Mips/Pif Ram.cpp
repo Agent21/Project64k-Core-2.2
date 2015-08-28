@@ -108,12 +108,12 @@ void CPifRam::PifRamRead (void)
 			if ((m_PifRam[CurPos] & 0xC0) == 0) 
 			{
 				if (Channel < 4) {
-					/*if (Controllers[Channel].Present && Controllers[Channel].RawData) {
+					if (Controllers[Channel].Present && Controllers[Channel].RawData) {
 						if (g_Plugins->Control()->ReadController) { g_Plugins->Control()->ReadController(Channel, &m_PifRam[CurPos]); }
 					}
 					else {
 						ReadControllerCommand(Channel, &m_PifRam[CurPos]);
-					}*/
+					}
 
 					ReadControllerCommand(Channel, &m_PifRam[CurPos]);
 				} 
@@ -194,11 +194,11 @@ void CPifRam::PifRamWrite (void) {
 		default:
 			if ((m_PifRam[CurPos] & 0xC0) == 0) {
 				if (Channel < 4) {
-					/*if (Controllers[Channel].Present && Controllers[Channel].RawData) {
+					if (Controllers[Channel].Present && Controllers[Channel].RawData) {
 						if (g_Plugins->Control()->ControllerCommand) { g_Plugins->Control()->ControllerCommand(Channel,&m_PifRam[CurPos]); }
 					} else {
 						ProcessControllerCommand(Channel,&m_PifRam[CurPos]);
-					}*/
+					}
 
 					ProcessControllerCommand(Channel, &m_PifRam[CurPos]);
 				} else if (Channel == 4) {

@@ -79,6 +79,7 @@ bool CControl_Plugin::Initiate(CN64System * System, CMainGui * RenderWindow)
 		InitiateControllers_1_0 = (void (__cdecl *)(HWND, CONTROL *))GetProcAddress( (HMODULE)m_hDll, "InitiateControllers" );
 		if (InitiateControllers_1_0 == NULL) { return false; }
 		InitiateControllers_1_0((HWND)RenderWindow->m_hMainWindow,m_PluginControllers);
+
 		m_Initilized = true;
 	}
 	else if (m_PluginInfo.Version >= 0x0101) // this path is taken with the default plugin
@@ -115,12 +116,13 @@ bool CControl_Plugin::Initiate(CN64System * System, CMainGui * RenderWindow)
 		m_Initilized = true;
 	}
 
-	// force all 4 controllers to be plugged in
+	// force all 4 controllers to be plugged in and not use raw data
 	if (ck->isPlayingKailleraGame)
 	{
 		for (int i = 0; i < 4; i++)
 		{
 			m_PluginControllers[i].Present = TRUE;
+			m_PluginControllers[i].RawData = FALSE;
 		}
 	}
 
