@@ -116,7 +116,7 @@ bool CControl_Plugin::Initiate(CN64System * System, CMainGui * RenderWindow)
 		m_Initilized = true;
 	}
 
-	// force all 4 controllers to be plugged in and not use raw data
+	//force all 4 controllers to be plugged in and not use raw data
 	if (ck->isPlayingKailleraGame)
 	{
 		for (int i = 0; i < 4; i++)
