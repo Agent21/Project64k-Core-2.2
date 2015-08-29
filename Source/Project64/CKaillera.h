@@ -1,7 +1,3 @@
-// plug in the appropraite number of controllers
-// check endian-ness since analogs are messed up
-// check why totally out of sync	 
-
 #pragma once
 
 #define KAILLERA_CLIENT_API_VERSION "0.8"
@@ -19,6 +15,16 @@ struct kailleraInfos
 	void (WINAPI *clientDroppedCallback)(char *nick, int playernb);
 
 	void (WINAPI *moreInfosCallback)(char *gamename);
+};
+
+#define PACKET_TYPE_INPUT 1
+#define PACKET_TYPE_CHEAT 2
+
+struct CKailleraPacket
+{
+	BYTE Type;
+	DWORD Command;
+	WORD  Value;
 };
 
 class CKaillera
@@ -48,20 +54,10 @@ private:
 	kailleraInfos   kInfos;
 	HMODULE KailleraHandle;
 	int LoadKailleraFuncs();
+	void processResult(CKailleraPacket ckp[]);
 	char *pszKailleraNamedRoms;
 	char *sAppName = "Project 64k Core 2.2";
 	//char *sAppName = "Project 64k 0.13 (01 Aug 2003)"; // CHANGE THIS
-	DWORD values[8]; // for a maximum of 8 players
+	DWORD values[4]; // for a maximum of 4 players
 	int playValuesLength;
 };
-
-// Emulator functions 
-/*int LoadKaillera();
-void EndGameKaillera();
-void CloseKaillera();
-void EndGameKaillera();
-void KailleraPlay(void);
-DWORD WINAPI KailleraThread(LPVOID lpParam);
-int isKailleraExist();*/
-
-//#endif

@@ -200,7 +200,7 @@ bool CN64System::RunFileImage ( const char * FileLoc )
 	WriteTraceF(TraceDebug,__FUNCTION__ ": Loading \"%s\"",FileLoc);
 	if (g_Rom->LoadN64Image(FileLoc)) 
 	{
-		g_System->RefreshGameSettings();
+		//g_System->RefreshGameSettings();
 
 		WriteTrace(TraceDebug,__FUNCTION__ ": Add Recent Rom");
 		g_Notify->AddRecentRom(FileLoc);

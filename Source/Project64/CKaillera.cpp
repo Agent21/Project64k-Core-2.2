@@ -132,9 +132,32 @@ void CKaillera::selectServerDialog(HWND hWnd)
 
 void CKaillera::modifyPlayValues(DWORD val)
 {
-	memset(&values, 0, sizeof(values));
-	values[0] = val;
-	playValuesLength = kailleraModifyPlayValues(&values, sizeof(DWORD));
+	memset(&values, 0, sizeof(values)); // clear the input array
+
+	CKailleraPacket ckp[4];
+	memset(ckp, 0, sizeof(ckp));
+
+	ckp[0].Type = PACKET_TYPE_INPUT;
+	ckp[0].Command = val;
+
+	playValuesLength = kailleraModifyPlayValues(ckp, sizeof(CKailleraPacket));
+
+	processResult(ckp);
+}
+
+void CKaillera::processResult(CKailleraPacket ckp[])
+{
+	for (int x = 0; x < 4; x++)
+	{
+		switch (ckp[x].Type)
+		{
+			case PACKET_TYPE_INPUT:
+				values[x] = ckp[x].Command;
+				break;
+			case PACKET_TYPE_CHEAT:
+				break;
+		}
+	}
 }
 
 DWORD CKaillera::getValues(int player)

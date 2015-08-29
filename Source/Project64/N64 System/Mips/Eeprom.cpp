@@ -11,6 +11,8 @@
 #include "stdafx.h"
 #include <time.h>
 
+extern CKaillera *ck;
+
 CEeprom::CEeprom (bool ReadOnly):
 	m_ReadOnly(ReadOnly),
 	m_hFile(NULL)
@@ -136,6 +138,9 @@ void CEeprom::LoadEeprom (void) {
 }
 
 void CEeprom::ReadFrom(BYTE * Buffer, int line) {
+	if (ck->isPlayingKailleraGame) // do not load or save data on kaillera
+		return;
+
 	int i;
 	
 	if (m_hFile == NULL) 
@@ -150,6 +155,9 @@ void CEeprom::ReadFrom(BYTE * Buffer, int line) {
 }
 
 void CEeprom::WriteTo(BYTE * Buffer, int line) {
+	if (ck->isPlayingKailleraGame) // do not load or save data on kaillera
+		return;
+
 	DWORD dwWritten;
 	int i;
 

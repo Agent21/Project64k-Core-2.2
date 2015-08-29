@@ -10,6 +10,8 @@
 ****************************************************************************/
 #include "stdafx.h"
 
+extern CKaillera *ck;
+
 CSram::CSram ( bool ReadOnly ) :
 	m_hFile(NULL),
 	m_ReadOnly(ReadOnly)
@@ -48,6 +50,9 @@ BOOL CSram::LoadSram (void) {
 }
 
 void CSram::DmaFromSram(BYTE * dest, int StartOffset, int len) {
+	if (ck->isPlayingKailleraGame) // do not load or save data on kaillera
+		return;
+
 	DWORD dwRead;
 
 	if (m_hFile == NULL) {
@@ -61,6 +66,9 @@ void CSram::DmaFromSram(BYTE * dest, int StartOffset, int len) {
 }
 
 void CSram::DmaToSram(BYTE * Source, int StartOffset, int len) {
+	if (ck->isPlayingKailleraGame) // do not load or save data on kaillera
+		return;
+
 	if (m_ReadOnly)
 	{
 		return;
