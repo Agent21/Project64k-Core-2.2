@@ -175,32 +175,105 @@ void CKaillera::processResult(CKailleraPacket ckp[])
 				}
 				else
 				{
-					// store the cheat locally
-					addCode(ckp[x].code);
-					// reload the cheats
-					g_BaseSystem->m_Cheats.LoadCheats(false);
+					if (strncmp(ckp[x].code, RESET, CODE_LENGTH) == 0) // this is a reset command (probably a cheat was disabled)
+					{
+						ck->clearCodes();
+					}
+					else if (strncmp(ckp[x].code, LOAD, CODE_LENGTH) == 0) // this is a load command command (probably just finished sending all cheats)
+					{
+						// reload the cheats
+						g_BaseSystem->m_Cheats.LoadCheats(false);
+					}
+					else // just a regular cheat
+					{
+						// store the cheat locally
+						addCode(ckp[x].code);
+					}
 
 					// send a confirmation response
-					CKailleraPacket response[4];
-					memset(response, 0, sizeof(response));
-					response[0].Type = PACKET_TYPE_CHEAT;
-					strncpy(response[0].code, CONFIRM, CODE_LENGTH);
-
-					playValuesLength = kailleraModifyPlayValues(response, sizeof(CKailleraPacket));
-
-					processResult(response);
+					sendConfirmCode();
 				}
 				break;
 		}
 	}
 }
 
+void CKaillera::sendResetCode()
+{
+	CKailleraPacket response[4];
+	memset(response, 0, sizeof(response));
+	response[0].Type = PACKET_TYPE_CHEAT;
+	strncpy(response[0].code, RESET, CODE_LENGTH);
+
+	playValuesLength = kailleraModifyPlayValues(response, sizeof(CKailleraPacket));
+
+	processResult(response);
+}
+void CKaillera::sendLoadCode()
+{
+	CKailleraPacket response[4];
+	memset(response, 0, sizeof(response));
+	response[0].Type = PACKET_TYPE_CHEAT;
+	strncpy(response[0].code, LOAD, CODE_LENGTH);
+
+	playValuesLength = kailleraModifyPlayValues(response, sizeof(CKailleraPacket));
+
+	processResult(response);
+}
+
+void CKaillera::sendConfirmCode()
+{
+	CKailleraPacket response[4];
+	memset(response, 0, sizeof(response));
+	response[0].Type = PACKET_TYPE_CHEAT;
+	strncpy(response[0].code, CONFIRM, CODE_LENGTH);
+
+	playValuesLength = kailleraModifyPlayValues(response, sizeof(CKailleraPacket));
+
+	processResult(response);
+}
+
 void CKaillera::addCode(LPCSTR str)
 {
-	char * newCode = new char[CODE_LENGTH];
-	strncpy(newCode, str, CODE_LENGTH);
+	int length = strlen(str);
+	char *c = new char[length + 1];
+	c[length] = '\0';
+	strncpy(c, str, length);
+	const char delimiter[] = ",";
+	char *token;
+	char *context = NULL;
 
-	codes.push_back(newCode);
+	token = strtok_s(c, delimiter, &context);
+
+	while (token != NULL)
+	{
+		char * newCode = new char[CODE_LENGTH];
+		strncpy(newCode, token, CODE_LENGTH);
+
+		codes.push_back(newCode);
+
+		token = strtok_s(NULL, delimiter, &context);
+	}
+}
+
+void CKaillera::delCode(LPCSTR str)
+{
+	int length = numCodes();
+	for (int x = 0; x < length; x++)
+	{
+		if (strncmp(codes.at(x), str, strlen(str)) == 0) // the code matches at location x
+		{
+			// deallocate the memory for the code
+			char *c = codes.at(x);
+			delete(c);
+
+			// remove the code from the vector
+			codes.erase(codes.begin() + x);
+
+			// short circut out. our job is done
+			return;
+		}
+	}
 }
 
 void CKaillera::clearCodes()
@@ -220,6 +293,8 @@ LPCSTR CKaillera::getCode(int i)
 
 void CKaillera::sendCodes()
 {
+	sendResetCode();
+
 	CKailleraPacket ckp[4];
 
 	for (int x = 0; x < codes.size(); x++)
@@ -233,6 +308,8 @@ void CKaillera::sendCodes()
 
 		processResult(ckp);
 	}
+
+	sendLoadCode();
 }
 
 int CKaillera::numCodes()

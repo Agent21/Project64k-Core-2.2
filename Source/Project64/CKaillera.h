@@ -58,6 +58,7 @@ public:
 	void endGame();
 
 	void addCode(LPCSTR str);
+	void delCode(LPCSTR str);
 	LPCSTR getCode(int i);
 	void clearCodes();
 	void sendCodes();
@@ -65,7 +66,14 @@ public:
 
 private:
 
+	const char* RESET = "00000000 0001";
+	const char* LOAD = "00000000 0002";
 	const char* CONFIRM = "00000000 0000";
+
+	void sendResetCode();
+	void sendLoadCode();
+	void sendConfirmCode();
+
 	kailleraInfos   kInfos;
 	HMODULE KailleraHandle;
 	int LoadKailleraFuncs();

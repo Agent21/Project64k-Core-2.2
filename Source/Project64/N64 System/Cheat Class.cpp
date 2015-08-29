@@ -159,7 +159,7 @@ void CCheats::LoadCheats(bool DisableSelected)
 
 	if (ck->isPlayingKailleraGame)
 	{
-		if (ck->playerNumber != 0) // if you're not player #1, the host
+		if (ck->playerNumber != 0) // if you're not player #1, (aka not the host)
 		{
 			// load the kaillera set of cheats			
 			int number_of_codes = ck->numCodes();
