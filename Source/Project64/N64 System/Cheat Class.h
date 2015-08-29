@@ -10,6 +10,15 @@
 ****************************************************************************/
 #pragma once
 
+// These should no longer be private so kaillera can handle cheats as well
+typedef struct {
+	DWORD Command;
+	WORD  Value;
+} GAMESHARK_CODE;
+
+typedef std::vector<GAMESHARK_CODE> CODES;
+typedef std::vector<CODES>          CODES_ARRAY;
+
 class CCheats 
 {
 public:
@@ -25,14 +34,6 @@ public:
 	inline bool CheatsSlectionChanged ( void ) const { return m_CheatSelectionChanged; }
 
 private:
-	typedef struct {
-		DWORD Command;
-		WORD  Value;
-	} GAMESHARK_CODE;
-
-	typedef std::vector<GAMESHARK_CODE> CODES;
-	typedef std::vector<CODES>          CODES_ARRAY;
-
 	enum { MaxCheats = 50000 };
 	
 

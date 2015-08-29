@@ -20,11 +20,16 @@ struct kailleraInfos
 #define PACKET_TYPE_INPUT 1
 #define PACKET_TYPE_CHEAT 2
 
+#define CODE_LENGTH 14 //8 for code, 1 for a space, 4 for value, 1 for trailing null
+
 struct CKailleraPacket
 {
 	BYTE Type;
-	DWORD Command;
-	WORD  Value;
+	union
+	{
+		char code[CODE_LENGTH];
+		DWORD input;
+	};
 };
 
 class CKaillera
@@ -38,6 +43,7 @@ public:
 	void terminateGameList();
 	void selectServerDialog(HWND hWnd);
 	void modifyPlayValues(DWORD values);
+	void modifyPlayValues(CODES c);
 	void setInfos();
 
 	int numberOfGames;
@@ -50,7 +56,16 @@ public:
 
 	DWORD getValues(int player);
 	void endGame();
+
+	void addCode(LPCSTR str);
+	LPCSTR getCode(int i);
+	void clearCodes();
+	void sendCodes();
+	int numCodes();
+
 private:
+
+	const char* CONFIRM = "00000000 0000";
 	kailleraInfos   kInfos;
 	HMODULE KailleraHandle;
 	int LoadKailleraFuncs();
@@ -59,5 +74,6 @@ private:
 	char *sAppName = "Project 64k Core 2.2";
 	//char *sAppName = "Project 64k 0.13 (01 Aug 2003)"; // CHANGE THIS
 	DWORD values[4]; // for a maximum of 4 players
+	std::vector<char*> codes;
 	int playValuesLength;
 };

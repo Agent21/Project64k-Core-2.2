@@ -37,6 +37,7 @@ int WINAPI kailleraGameCallback(char *game, int player, int numplayers)
 	g_Notify->BringToTop();
 
 	ck->isPlayingKailleraGame = true;
+	ck->clearCodes();
 	g_BaseSystem->RunFileImage(temp);
 
 	return 0;
@@ -138,7 +139,7 @@ void CKaillera::modifyPlayValues(DWORD val)
 	memset(ckp, 0, sizeof(ckp));
 
 	ckp[0].Type = PACKET_TYPE_INPUT;
-	ckp[0].Command = val;
+	ckp[0].input = val;
 
 	playValuesLength = kailleraModifyPlayValues(ckp, sizeof(CKailleraPacket));
 
@@ -152,12 +153,91 @@ void CKaillera::processResult(CKailleraPacket ckp[])
 		switch (ckp[x].Type)
 		{
 			case PACKET_TYPE_INPUT:
-				values[x] = ckp[x].Command;
+				values[x] = ckp[x].input;
 				break;
 			case PACKET_TYPE_CHEAT:
+				if (strncmp(ckp[x].code, CONFIRM, CODE_LENGTH) == 0) // this is a response packet which requires no processing
+					continue;
+
+				if (playerNumber == 0) // if we're player 1 and we're receiving a cheat code from another player... 
+				{
+					if (x != 0)
+					{
+						// this should never happen.  this means another player is sending us, the host, a cheat.
+						// print some sort of error?  player #1 (index 0) should never receive cheats from other players
+
+						MessageBox(NULL, "ERROR: Player #1 received a cheat code from another player. This should never happen. Desync likely.", "Whoops", NULL);
+					}
+					else // its us seeing our own cheat!  ignore it
+					{
+						continue;
+					}
+				}
+				else
+				{
+					// store the cheat locally
+					addCode(ckp[x].code);
+					// reload the cheats
+					g_BaseSystem->m_Cheats.LoadCheats(false);
+
+					// send a confirmation response
+					CKailleraPacket response[4];
+					memset(response, 0, sizeof(response));
+					response[0].Type = PACKET_TYPE_CHEAT;
+					strncpy(response[0].code, CONFIRM, CODE_LENGTH);
+
+					playValuesLength = kailleraModifyPlayValues(response, sizeof(CKailleraPacket));
+
+					processResult(response);
+				}
 				break;
 		}
 	}
+}
+
+void CKaillera::addCode(LPCSTR str)
+{
+	char * newCode = new char[CODE_LENGTH];
+	strncpy(newCode, str, CODE_LENGTH);
+
+	codes.push_back(newCode);
+}
+
+void CKaillera::clearCodes()
+{
+	while(codes.size() > 0)
+	{
+		char * temp = codes.front();
+		delete(temp);
+		codes.erase(codes.begin());
+	}
+}
+
+LPCSTR CKaillera::getCode(int i)
+{
+	return codes.at(i);
+}
+
+void CKaillera::sendCodes()
+{
+	CKailleraPacket ckp[4];
+
+	for (int x = 0; x < codes.size(); x++)
+	{
+		memset(ckp, 0, sizeof(ckp));
+
+		ckp[0].Type = PACKET_TYPE_CHEAT;
+		strncpy(ckp[0].code, codes.at(x), strlen(codes.at(x)));
+
+		playValuesLength = kailleraModifyPlayValues(ckp, sizeof(CKailleraPacket));
+
+		processResult(ckp);
+	}
+}
+
+int CKaillera::numCodes()
+{
+	return codes.size();
 }
 
 DWORD CKaillera::getValues(int player)

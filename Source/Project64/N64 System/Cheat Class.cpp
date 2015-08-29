@@ -12,6 +12,8 @@
 
 #include "Settings/SettingType/SettingsType-Cheats.h"
 
+extern CKaillera *ck;
+
 enum { WM_EDITCHEAT           = WM_USER + 0x120 };
 enum { UM_CHANGECODEEXTENSION = WM_USER + 0x121 };
 
@@ -155,28 +157,52 @@ void CCheats::LoadCheats(bool DisableSelected)
 	m_CheatSelectionChanged = false;
 	m_Codes.clear();
 
-	for (int CheatNo = 0; CheatNo < MaxCheats; CheatNo ++ ) 
+	if (ck->isPlayingKailleraGame)
 	{
-		stdstr LineEntry = g_Settings->LoadStringIndex(Cheat_Entry,CheatNo);
+		if (ck->playerNumber != 0) // if you're not player #1, the host
+		{
+			// load the kaillera set of cheats			
+			int number_of_codes = ck->numCodes();
+			for (int CheatNo = 0; CheatNo < number_of_codes; CheatNo++)
+			{
+				LoadCode(CheatNo, ck->getCode(CheatNo));
+			}
+
+			return; // then return to bypass loading your local set of cheats
+		}
+
+		// if the code reaches here, you must be player #1
+		ck->clearCodes(); // clear the code vector which will be reformed below
+	}
+
+	for (int CheatNo = 0; CheatNo < MaxCheats; CheatNo++)
+	{
+		stdstr LineEntry = g_Settings->LoadStringIndex(Cheat_Entry, CheatNo);
 		if (LineEntry.empty()) { break; }
-		if (!g_Settings->LoadBoolIndex(Cheat_Active,CheatNo))
+		if (!g_Settings->LoadBoolIndex(Cheat_Active, CheatNo))
 		{
 			continue;
 		}
 		if (DisableSelected)
 		{
-			g_Settings->SaveBoolIndex(Cheat_Active,CheatNo,false);
+			g_Settings->SaveBoolIndex(Cheat_Active, CheatNo, false);
 			continue;
 		}
 
 		//Find the start and end of the name which is surrounded in ""
 		int StartOfName = LineEntry.find("\"");
 		if (StartOfName == -1) { continue; }
-		int EndOfName = LineEntry.find("\"",StartOfName + 1);
+		int EndOfName = LineEntry.find("\"", StartOfName + 1);
 		if (EndOfName == -1) { continue; }
-		
+
+		if (ck->isPlayingKailleraGame) // and keep in mind only the host (player #1) would make it this far
+			ck->addCode(&LineEntry.c_str()[EndOfName + 2]);
+
 		LoadCode(CheatNo, &LineEntry.c_str()[EndOfName + 2]);
 	}
+
+	if (ck->isPlayingKailleraGame) // and keep in mind only the host (player #1) would make it this far
+		ck->sendCodes();
 }
 
 /********************************************************************************************
