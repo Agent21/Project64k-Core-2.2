@@ -92,6 +92,8 @@ bool CMainMenu::ProcessMessage(HWND hWnd, DWORD /*FromAccelerator*/, DWORD MenuI
 		g_BaseSystem->StartEmulation(true);
 		break;
 	case ID_FILE_ENDEMULATION: 
+		ck->endGame();
+		ck->isPlayingKailleraGame = false;
 		WriteTrace(TraceDebug,__FUNCTION__ ": ID_FILE_ENDEMULATION");
 		CN64System::CloseSystem();
 		_Gui->SaveWindowLoc();
